@@ -2,19 +2,21 @@
   <v-container class="fill-height">
     <v-responsive
       class="align-centerfill-height mx-auto"
-      max-width="900"
     >
       <VRow>
         <VCard>
-          <VCardTitle>
-            Hello
-          </VCardTitle>
         </VCard>
       </VRow>
+      <Login v-if="authStore.isLoggedIn"/>
+      <div v-else>
+        <ToDoList></ToDoList>
+      </div>
     </v-responsive>
   </v-container>
 </template>
 
 <script setup lang="ts">
-  //
+import { useAuthStore } from '../stores/authStore'
+
+const authStore = useAuthStore()
 </script>

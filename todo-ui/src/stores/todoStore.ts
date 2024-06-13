@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getTodos, createTodo, deleteTodo, toggleTodoState } from '../services/api'
+import { useAuthStore } from './authStore'
 
 export const useTodosStore = defineStore('todos', () => {
   const todos = ref([])
-
+  const authStore = useAuthStore()
   const fetchTodos = async () => {
     try {
       const response = await getTodos()
+      if(response.status === 401) authStore.isLoggedIn = false
       todos.value = response.data
     } catch (error) {
       console.error('Fetching todos failed', error)
@@ -24,6 +26,7 @@ export const useTodosStore = defineStore('todos', () => {
         description: todoDescription.value,
         completed: false,
       })
+      if(response.status === 401) authStore.isLoggedIn = false
       todos.value.push(response.data)
       todoTitle.value = ''
       todoDescription.value = ''
@@ -45,6 +48,7 @@ export const useTodosStore = defineStore('todos', () => {
   const toggleTodoCompletion = async (publicId: string) => {
     try {
       const response = await toggleTodoState(publicId)
+      if(response.status === 401) authStore.isLoggedIn = false
       const index = todos.value.findIndex(todo => todo.public_id === publicId)
       if (index !== -1) {
         todos.value[index] = response.data

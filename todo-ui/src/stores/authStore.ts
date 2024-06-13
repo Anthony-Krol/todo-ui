@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (username: string, password: string) => {
     try {
       const response = await loginUser({ username, password })
+      if(response.status === 401) isLoggedIn.value = false
       token.value = response.data.access_token
       localStorage.setItem('authToken', response.data.access_token)
       isLoggedIn.value = true

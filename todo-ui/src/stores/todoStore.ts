@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getTodos, createTodo } from '../services/api'
+import { getTodos, createTodo, deleteTodo, toggleTodoState } from '../services/api'
 
 export const useTodosStore = defineStore('todos', () => {
   const todos = ref([])
@@ -33,5 +33,26 @@ export const useTodosStore = defineStore('todos', () => {
   }
   }
 
-  return { todos, fetchTodos, addTodo, todoDescription, todoTitle }
+  const removeTodo = async (publicId: string) => {
+    try {
+      await deleteTodo(publicId)
+      todos.value = todos.value.filter(todo => todo.public_id !== publicId)
+    } catch (error) {
+      console.error('Deleting todo failed', error)
+    }
+  }
+
+  const toggleTodoCompletion = async (publicId: string) => {
+    try {
+      const response = await toggleTodoState(publicId)
+      const index = todos.value.findIndex(todo => todo.public_id === publicId)
+      if (index !== -1) {
+        todos.value[index] = response.data
+      }
+    } catch (error) {
+      console.error('Toggling todo state failed', error)
+    }
+  }
+
+  return { todos, todoTitle, todoDescription, fetchTodos, addTodo, removeTodo, toggleTodoCompletion }
 })

@@ -6,10 +6,23 @@
       <v-list-item
         v-for="todo in todosStore.todos"
         :key="todo.public_id"
-        :prepend-icon="todo.completed ? 'mdi-check' : 'mdi-cancel'"
+        :prepend-icon="todo.completed ? 'mdi-check-circle-outline' : 'mdi-cancel'"
+        @click:prepend="todosStore.toggleTodoCompletion(todo.public_id)"
       >
         <template v-slot:subtitle>
-          <span class="font-weight-bold">{{ todo.title }}</span> &mdash; {{ todo.description }}
+          <v-row>
+            <v-col>
+              <span class="font-weight-bold">{{ todo.title }}</span> &mdash; {{ todo.description }}
+            </v-col>
+            <v-col class="d-flex justify-end">
+              <v-btn icon @click.stop="todosStore.removeTodo(todo.public_id)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+              <v-btn icon @click.stop="todosStore.toggleTodoCompletion(todo.public_id)">
+                <v-icon>{{ todo.completed ? 'mdi-toggle-switch' : 'mdi-toggle-switch-off-outline' }}</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
         </template>
         <v-divider />
       </v-list-item>
@@ -47,6 +60,12 @@
                 </v-form>
               </v-sheet>
             </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn text="Close" @click="isActive = false"></v-btn>
+            </v-card-actions>
           </v-card>
         </template>
       </v-dialog>

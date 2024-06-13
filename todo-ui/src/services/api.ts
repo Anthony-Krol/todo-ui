@@ -41,3 +41,20 @@ export const createTodo = async (todoData: { title: string; description: string;
     },
   });
 };
+
+export const deleteTodo = async (publicId: string) => {
+  return await axios.delete(`${API_URL}/todos/${publicId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+    },
+  })
+}
+
+// Toggle a todo state
+export const toggleTodoState = async (publicId: string) => {
+  return await axios.patch(`${API_URL}/todos/${publicId}/toggle`, null, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+    },
+  })
+}

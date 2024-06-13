@@ -29,6 +29,9 @@ export const useAuthStore = defineStore('auth', () => {
       console.error('Registration failed', err)
     }
   }
-
-  return { token, error, login, register, isLoggedIn }
+  const logout = () =>{
+    localStorage.setItem('authToken', '')
+    isLoggedIn.value = false
+  }
+  return { token, error, login, register, isLoggedIn, logout }
 })

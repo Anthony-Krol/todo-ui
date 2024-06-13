@@ -10,6 +10,7 @@
       <Login v-if="authStore.isLoggedIn"/>
       <div v-else>
         <ToDoList></ToDoList>
+        <VBtn @click="authStore.logout">Logout</VBtn>
       </div>
     </v-responsive>
   </v-container>
